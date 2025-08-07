@@ -1,0 +1,111 @@
+﻿@model JobPortal.Models.JobApplication
+
+@{
+    ViewBag.Title = "Apply for " + ViewBag.JobTitle;
+}
+
+<style>
+    body {
+        background-color: #f4f7f6;
+    }
+
+    .form-container {
+        background-color: #ffffff;
+        padding: 2.5rem 3rem;
+        border-radius: 10px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+        border-top: 5px solid #007bff;
+    }
+
+    .form-header h2 {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-header .lead {
+        color: #6c757d;
+        font-size: 1.2rem;
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .form-control-file {
+        border: 1px solid #ced4da;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .btn-submit {
+        background-image: linear-gradient(to right, #007bff, #0056b3);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 12px 30px;
+        border-radius: 50px;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+            color: white;
+        }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>@ViewBag.Title</h2>
+                    <p class="lead">Submit your application</p>
+                </div>
+
+                @* IMPORTANT: Add enctype for file uploads *@
+                @using (Html.BeginForm("Create", "JobApplications", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        @* This hidden field ensures we know which job is being applied for *@
+                        @Html.HiddenFor(model => model.JobId)
+
+                        <div class="form-group mb-4">
+                            @Html.LabelFor(model => model.ApplicantName, "Your Name", htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.ApplicantName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ApplicantName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mb-4">
+                            @Html.LabelFor(model => model.ApplicantEmail, "Your Email", htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.ApplicantEmail, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ApplicantEmail, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mb-4">
+                            @Html.LabelFor(model => model.CoverLetter, htmlAttributes: new { @class = "form-label" })
+                            @Html.TextAreaFor(model => model.CoverLetter, 10, 30, new { @class = "form-control", placeholder = "Tell us why you're a great fit for this role..." })
+                            @Html.ValidationMessageFor(model => model.CoverLetter, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="form-label" for="resumeFile">Upload Resume (Optional)</label>
+                            <input type="file" name="resumeFile" id="resumeFile" class="form-control-file w-100" />
+                        </div>
+
+                        <div class="form-group mt-5 text-center">
+                            <input type="submit" value="Submit Application" class="btn btn-submit" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

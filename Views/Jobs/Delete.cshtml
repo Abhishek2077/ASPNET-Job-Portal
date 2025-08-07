@@ -1,0 +1,69 @@
+﻿@model JobPortal.Models.Job
+
+@{
+    ViewBag.Title = "Delete Job Posting";
+}
+
+<style>
+    .delete-container {
+        background-color: #fff;
+        margin-top: 3rem;
+        padding: 3rem;
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        border-top: 5px solid #dc3545;
+        text-align: center;
+    }
+
+        .delete-container h2 {
+            font-weight: 600;
+        }
+
+    .delete-warning {
+        font-size: 1.2rem;
+        color: #dc3545;
+        font-weight: 500;
+    }
+
+    .job-info {
+        text-align: left;
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 5px;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid #dee2e6;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="delete-container">
+                <h2>@ViewBag.Title</h2>
+                <p class="delete-warning mt-3">Are you sure you want to permanently delete this job posting?</p>
+
+                <div class="job-info">
+                    <h4>@Html.DisplayFor(model => model.Title)</h4>
+                    <hr />
+                    <dl class="dl-horizontal">
+                        <dt>@Html.DisplayNameFor(model => model.CompanyName)</dt>
+                        <dd>@Html.DisplayFor(model => model.CompanyName)</dd>
+                        <dt>@Html.DisplayNameFor(model => model.Location)</dt>
+                        <dd>@Html.DisplayFor(model => model.Location)</dd>
+                    </dl>
+                </div>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        <input type="submit" value="Delete" class="btn btn-danger btn-lg" />
+                        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-secondary btn-lg" })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,162 @@
+﻿@model JobPortal.Models.Job
+
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .details-container {
+        background-color: #fff;
+        margin-top: 3rem;
+        padding: 3rem;
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .details-header {
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+        .details-header .job-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #343a40;
+        }
+
+        .details-header .company-name {
+            font-size: 1.5rem;
+            color: #6c757d;
+        }
+
+        .details-header .location {
+            font-size: 1.1rem;
+            color: #6c757d;
+        }
+
+    .details-section h4 {
+        color: #007bff;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        border-left: 4px solid #007bff;
+        padding-left: 10px;
+    }
+
+    .job-description {
+        line-height: 1.8;
+        color: #495057;
+    }
+
+    .info-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+        .info-list li {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: #495057;
+        }
+
+        .info-list i {
+            margin-right: 12px;
+            color: #007bff;
+            width: 20px;
+        }
+
+    .apply-button-container {
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .btn-apply {
+        background-color: #28a745;
+        color: white;
+        font-size: 1.2rem;
+        padding: 12px 40px;
+        border-radius: 50px;
+        transition: all .3s ease;
+    }
+
+        .btn-apply:hover {
+            background-color: #218838;
+            color: white;
+            transform: scale(1.05);
+        }
+
+    .action-links-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    .admin-actions a {
+        margin-left: 10px;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+<div class="container">
+    <div class="details-container">
+        <div class="details-header">
+            <h1 class="job-title">@Html.DisplayFor(model => model.Title)</h1>
+            <h3 class="company-name">@Html.DisplayFor(model => model.CompanyName)</h3>
+            <p class="location"><i class="fas fa-map-marker-alt"></i> @Html.DisplayFor(model => model.Location)</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="details-section">
+                    <h4>Job Description</h4>
+                    <p class="job-description">
+                        @Html.Raw(Model.Description.Replace("\n", "<br />"))
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="details-section">
+                    <h4>Job Summary</h4>
+                    <ul class="info-list">
+                        @if (Model.Salary.HasValue)
+                        {
+                            <li><i class="fas fa-dollar-sign"></i> <strong>Salary:</strong> @string.Format("{0:C0}", Model.Salary)</li>
+                        }
+                        <li><i class="fas fa-briefcase"></i> <strong>Type:</strong> @Html.DisplayFor(model => model.JobType)</li>
+                        <li><i class="fas fa-envelope"></i> <strong>Contact:</strong> @Html.DisplayFor(model => model.ContactEmail)</li>
+                        <li><i class="fas fa-calendar-alt"></i> <strong>Posted:</strong> @Model.PostedDate.ToString("MMMM dd, yyyy")</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        @* --- HIDE THIS BUTTON IF NOT A JOB SEEKER --- *@
+        @if (Request.IsAuthenticated && User.IsInRole("Job Seeker"))
+        {
+            <div class="apply-button-container">
+                @Html.ActionLink("Apply Now", "Create", "JobApplications", new { jobId = Model.JobId }, new { @class = "btn btn-apply" })
+            </div>
+        }
+
+        <hr class="my-4" />
+
+        <div class="action-links-container">
+            @Html.ActionLink("← Back to Job List", "Index", null, new { @class = "btn btn-secondary" })
+
+            @* --- HIDE THESE BUTTONS IF NOT AN EMPLOYER --- *@
+            @if (Request.IsAuthenticated && User.IsInRole("Employer"))
+            {
+                <div class="admin-actions">
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.JobId }, new { @class = "btn btn-warning" })
+                    @Html.ActionLink("Delete", "Delete", new { id = Model.JobId }, new { @class = "btn btn-danger" })
+                </div>
+            }
+        </div>
+    </div>
+</div>

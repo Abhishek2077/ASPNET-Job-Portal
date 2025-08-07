@@ -1,0 +1,129 @@
+﻿@model IEnumerable<JobPortal.Models.Job>
+
+@{
+    ViewBag.Title = "Available Jobs";
+}
+
+<style>
+    .job-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        transition: box-shadow .3s ease-in-out, transform .3s ease-in-out;
+        margin-bottom: 2rem;
+        background-color: #fff;
+    }
+
+        .job-card:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,.1);
+            transform: translateY(-5px);
+        }
+
+    .job-card-header {
+        background-color: #f8f9fa;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .job-title {
+        color: #0056b3;
+        font-weight: 600;
+    }
+
+    .company-name {
+        color: #5a6268;
+        font-size: 0.95rem;
+    }
+
+    .job-details-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+        .job-details-list li {
+            margin-bottom: 0.5rem;
+            color: #343a40;
+        }
+
+        .job-details-list i {
+            margin-right: 10px;
+            color: #007bff;
+            width: 20px;
+            text-align: center;
+        }
+
+    .btn-details {
+        background-color: #007bff;
+        color: white;
+    }
+
+        .btn-details:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+
+    .page-header {
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 3px solid #007bff;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+<div class="container mt-5">
+    <div class="page-header">
+        <h2>@ViewBag.Title</h2>
+        <p class="lead">Find your next career opportunity.</p>
+    </div>
+
+    @* --- HIDE THIS BUTTON IF NOT AN EMPLOYER --- *@
+    @if (Request.IsAuthenticated && User.IsInRole("Employer"))
+    {
+        <p>
+            @Html.ActionLink("Post a New Job", "Create", "Jobs", null, new { @class = "btn btn-primary btn-lg mb-4" })
+        </p>
+    }
+
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="col-12">
+                <div class="alert alert-info">
+                    There are currently no jobs posted. Check back later or be the first to post one!
+                </div>
+            </div>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card job-card">
+                        <div class="card-header job-card-header">
+                            <h5 class="card-title mb-0 job-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+                            <p class="mb-0 company-name">@Html.DisplayFor(modelItem => item.CompanyName)</p>
+                        </div>
+                        <div class="card-body">
+                            <ul class="job-details-list">
+                                <li><i class="fas fa-map-marker-alt"></i> @Html.DisplayFor(modelItem => item.Location)</li>
+                                <li><i class="fas fa-briefcase"></i> @Html.DisplayFor(modelItem => item.JobType)</li>
+                                @if (item.Salary.HasValue)
+                                {
+                                    <li><i class="fas fa-dollar-sign"></i> @string.Format("{0:C0}", item.Salary)</li>
+                                }
+                            </ul>
+                            <p class="card-text">
+                                @(item.Description.Length > 100 ? item.Description.Substring(0, 100) + "..." : item.Description)
+                            </p>
+                            @Html.ActionLink("View Details", "Details", new { id = item.JobId }, new { @class = "btn btn-details" })
+                        </div>
+                        <div class="card-footer text-muted">
+                            Posted on: @item.PostedDate.ToString("MMM dd, yyyy")
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+    

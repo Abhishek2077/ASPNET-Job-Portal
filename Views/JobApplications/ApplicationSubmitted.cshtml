@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Application Submitted";
+}
+
+<style>
+    .confirmation-container {
+        text-align: center;
+        margin-top: 5rem;
+        padding: 3rem;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .confirmation-icon {
+        font-size: 5rem;
+        color: #28a745;
+    }
+
+    .confirmation-container h2 {
+        margin-top: 1.5rem;
+        color: #333;
+        font-weight: 600;
+    }
+</style>
+
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="confirmation-container">
+                <div class="confirmation-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>Thank You!</h2>
+                <p class="lead">Your application has been successfully submitted.</p>
+                <hr />
+                <p>
+                    @Html.ActionLink("Return to Job Listings", "Index", "Jobs", null, new { @class = "btn btn-primary" })
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
