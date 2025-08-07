@@ -18,9 +18,9 @@ A full-featured job portal web application built with ASP.NET MVC 5, Entity Fram
 ## Technologies Used
 
 * **Backend:** C#, ASP.NET MVC 5, Entity Framework 6
-*nstructions
+*Instructions
 1. Clone the repository: `git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git`
-2. Open the `DatabaseSetup.sql` file in SQL Server Management Studio (SSMS) and execute the script to create the `JobPortalDB` database and tables.
+2. Open the `script.sql` file in SQL Server Management Studio (SSMS) and execute the script to create the `JobPortalDB` database and tables.
 3. Open the `JobPortal.sln` file in Visual Studio.
 4. In the `Web.config` file, update the `JobPortalDB` connection string with your SQL Server instance name if it's different from `(localdb)\MSSQLLocalDB`.
 5. Build the solution and run the project (F5).
